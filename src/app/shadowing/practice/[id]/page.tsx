@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Mic, Square, Play, Eye, EyeOff, Volume2, Repeat, CheckCircle, MicOff, Sparkles } from 'lucide-react';
 import { useAudioRecorder } from '@/hooks/useAudioRecorder';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
-import { evaluateAudio, EvaluationResult } from '@/actions/audio';
+import { evaluateAudio, EvaluationResult, WordAnalysis } from '@/actions/audio';
 import { speak } from '@/lib/audio';
 import { cn } from '@/lib/utils';
 import { Slider } from '@/components/ui/slider';
