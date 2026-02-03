@@ -1,5 +1,45 @@
 import { useState, useEffect, useCallback } from 'react';
 
+// Polyfill types for Web Speech API
+interface SpeechRecognition extends EventTarget {
+    continuous: boolean;
+    interimResults: boolean;
+    lang: string;
+    start(): void;
+    stop(): void;
+    onresult: (event: SpeechRecognitionEvent) => void;
+    onend: () => void;
+    onerror: (event: SpeechRecognitionErrorEvent) => void;
+}
+
+interface SpeechRecognitionEvent {
+    results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+    length: number;
+    [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+    isFinal: boolean;
+    [index: number]: SpeechRecognitionAlternative;
+}
+
+interface SpeechRecognitionAlternative {
+    transcript: string;
+}
+
+interface SpeechRecognitionErrorEvent {
+    error: string;
+}
+
+// Extend Window interface
+interface Window {
+    SpeechRecognition: { new(): SpeechRecognition };
+    webkitSpeechRecognition: { new(): SpeechRecognition };
+}
+
 export function useSpeechRecognition(options?: { continuous?: boolean }) {
     const [isListening, setIsListening] = useState(false);
     const [transcript, setTranscript] = useState('');
@@ -9,8 +49,7 @@ export function useSpeechRecognition(options?: { continuous?: boolean }) {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            // @ts-ignore
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
             if (SpeechRecognition) {
                 const reco = new SpeechRecognition();
                 reco.continuous = continuous;
