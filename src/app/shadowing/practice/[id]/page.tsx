@@ -110,7 +110,7 @@ export default function ShadowingPracticePage() {
             reader.onloadend = async () => {
                 const base64 = reader.result as string;
                 // Full Mode = Analyze Full Script, Step Mode = Analyze Single Sentence
-                const text = mode === 'step' ? sentences[activeSentenceIndex] : script.content;
+                const text = mode === 'step' ? sentences[activeSentenceIndex] : (script?.content || "");
                 try {
                     // Pass User API Key
                     const result = await evaluateAudio(base64, text, profile.apiKey);
