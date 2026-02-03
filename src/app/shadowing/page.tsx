@@ -44,7 +44,8 @@ export default function ShadowingPage() {
                 targetTopic,
                 { length, difficulty, mode: narrativeMode },
                 topicUsageHistory,
-                recentTopics
+                recentTopics,
+                profile.apiKey
             );
             const newScript: ShadowingScript = {
                 id: uuidv4(),

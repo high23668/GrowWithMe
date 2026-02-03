@@ -38,6 +38,8 @@ export default function ShadowingPracticePage() {
     const id = params.id as string;
     const scripts = useStore((state) => state.scripts);
     const script = scripts.find(s => s.id === id);
+    const profile = useStore((state) => state.profile);
+
 
     // States
     const [showText, setShowText] = useState(true);
@@ -109,7 +111,8 @@ export default function ShadowingPracticePage() {
                 const base64 = reader.result as string;
                 const text = sentences[activeSentenceIndex];
                 try {
-                    const result = await evaluateAudio(base64, text);
+                    // Pass User API Key
+                    const result = await evaluateAudio(base64, text, profile.apiKey);
                     setEvaluation(result);
                 } catch (e: any) {
                     console.error('Analysis failed:', e);

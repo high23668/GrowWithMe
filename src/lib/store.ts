@@ -17,6 +17,7 @@ export type Profile = {
     tone: 'friendly' | 'spartan' | 'business' | 'kind';
     // Additional "Flavor" options
     motivationQuotes: string; // Newline separated
+    apiKey?: string; // App-Level API Key (User Provided)
 };
 
 export type WordStatus = 'new' | 'learning' | 'mastered' | 'review';

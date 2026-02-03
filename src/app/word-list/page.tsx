@@ -49,7 +49,7 @@ export default function WordListPage() {
 
         setIsGenerating(true);
         try {
-            const results = await generateSentences(profile, targetWords, topicUsageHistory);
+            const results = await generateSentences(profile, targetWords, topicUsageHistory, profile.apiKey);
 
             const allUsedFields: string[] = [];
 

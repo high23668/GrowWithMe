@@ -1,19 +1,18 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Profile, WordItem } from './store';
 
-// Initialize Gemini
-// NOTE: For client-side usage we strictly need NEXT_PUBLIC prefix if calling from component.
-// However, for security, it is BETTER to call this from a Server Action or API Route.
-// For this MVP, we will try to use a Server Action approach if possible, but if not, client side is easiest for "personal" app.
-// Let's assume user puts key in .env.local
+// Helper to get model instance with dynamic key
+function getModel(userApiKey?: string) {
+    // Priority: User Provided Key > Env Var > Empty
+    const key = userApiKey || process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 
-const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
+    if (!key) {
+        throw new Error('Gemini API Key is missing. Please set it in Profile or .env');
+    }
 
-// If we are on the client and no key, we can't do much.
-// We'll define the model based on the key presence.
-
-const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const genAI = new GoogleGenerativeAI(key);
+    return genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+}
 
 export type GeneratedSentence = {
     word: string;
@@ -28,11 +27,10 @@ export type GeneratedSentence = {
 export async function generateSentences(
     profile: Profile,
     words: WordItem[],
-    usageHistory: Record<string, number> = {}
+    usageHistory: Record<string, number> = {},
+    apiKey?: string
 ): Promise<GeneratedSentence[]> {
-    if (!apiKey) {
-        throw new Error('Gemini API Key is missing. Please set NEXT_PUBLIC_GEMINI_API_KEY in .env.local');
-    }
+    const model = getModel(apiKey);
 
     // Calculate under-used topics
     const fields = ['occupation', 'family', 'origin', 'hobbies', 'topics', 'additionalContext', 'dream'];
@@ -126,11 +124,10 @@ export async function generateShadowingScript(
     topic: string,
     options?: { length: string; difficulty: string; mode?: string },
     usageHistory: Record<string, number> = {},
-    recentTopics: string[] = []
+    recentTopics: string[] = [],
+    apiKey?: string
 ): Promise<GeneratedScript> {
-    if (!apiKey) {
-        throw new Error('API Key missing');
-    }
+    const model = getModel(apiKey);
 
     const { length = 'Short', difficulty = profile.level || 'B1', mode = 'default' } = options || {};
 

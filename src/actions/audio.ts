@@ -2,12 +2,6 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
-const genAI = new GoogleGenerativeAI(apiKey);
-// Using a flash model that supports multimodal input. 
-// Verified available model from API list: "models/gemini-2.5-flash"
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-
 export type WordAnalysis = {
     word: string;
     score: number;
@@ -24,12 +18,21 @@ export type EvaluationResult = {
     words: WordAnalysis[];
 };
 
-export async function evaluateAudio(audioBase64: string, referenceText: string): Promise<EvaluationResult> {
+export async function evaluateAudio(audioBase64: string, referenceText: string, apiKey?: string): Promise<EvaluationResult> {
     console.log('--- evaluateAudio Started ---');
-    if (!apiKey) {
-        console.error('SERVER ALERT: API Key is missing in process.env');
-        throw new Error('Server API Key missing. Check .env.local');
+
+    // Priority: Fn Arg > Env Var
+    const key = apiKey || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
+    if (!key) {
+        console.error('SERVER ALERT: API Key is missing');
+        throw new Error('API Key missing. Please set it in Profile or .env');
     }
+
+    const genAI = new GoogleGenerativeAI(key);
+    // Using a flash model that supports multimodal input. 
+    // Verified available model from API list: "models/gemini-2.5-flash"
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     try {
         // Convert Base64 to Part
