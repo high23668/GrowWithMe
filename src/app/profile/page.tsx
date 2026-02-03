@@ -209,35 +209,37 @@ export default function ProfilePage() {
                         />
                     </div>
                 </CardContent>
-                <Card className="mb-8 border-2 border-indigo-100 dark:border-indigo-900">
-                    <CardHeader>
-                        <CardTitle>API Configuration (Crucial)</CardTitle>
-                        <CardDescription>
-                            Set your own Google Gemini API Key to enable AI features.
-                            <br />
-                            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                                Get your free API Key here
-                            </a>
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="apiKey">Google Gemini API Key</Label>
-                            <Input
-                                id="apiKey"
-                                type="password"
-                                placeholder="AIzaSy..."
-                                value={formData.apiKey || ''}
-                                onChange={(e) => handleChange('apiKey', e.target.value)}
-                            />
-                            <p className="text-xs text-muted-foreground">Your key is stored only in your browser (LocalStorage).</p>
-                        </div>
-                    </CardContent>
-                </Card>
+            </Card>
 
-                <div className="flex justify-end">
-                    <Button onClick={handleSave} size="lg">Save Profile</Button>
-                </div>
+            <Card className="mb-8 border-2 border-indigo-100 dark:border-indigo-900">
+                <CardHeader>
+                    <CardTitle>API Configuration (Crucial)</CardTitle>
+                    <CardDescription>
+                        Set your own Google Gemini API Key to enable AI features.
+                        <br />
+                        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                            Get your free API Key here
+                        </a>
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="apiKey">Google Gemini API Key</Label>
+                        <Input
+                            id="apiKey"
+                            type="password"
+                            placeholder="AIzaSy..."
+                            value={formData.apiKey || ''}
+                            onChange={(e) => handleChange('apiKey', e.target.value)}
+                        />
+                        <p className="text-xs text-muted-foreground">Your key is stored only in your browser (LocalStorage).</p>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <div className="flex justify-end">
+                <Button onClick={handleSave} size="lg">Save Profile</Button>
+            </div>
         </div>
     );
 }
